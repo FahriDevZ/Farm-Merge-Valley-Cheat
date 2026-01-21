@@ -217,9 +217,9 @@ let CheatAutoInit = new Proxy(Cheat, {
           prop !== "init" &&
           prop !== "fmvImport"
         ) {
-          return (...arguments) => {
+          return (...args) => {
             target.init();
-            return orig.apply(target, arguments);
+            return orig.apply(target, args);
           };
         }
         return orig;
