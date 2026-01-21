@@ -204,6 +204,32 @@ class Cheat {
       .keys()
       .toArray();
   }
+
+  // just for fun use temporary premium to act like premium player (not permanent)
+  premiumMode() {
+    const iap = this.backendServices.iap;
+    const item = iap.getItemByID("premium");
+    if (item) {
+      const sku = item.sku;
+
+      iap._activeSubscriptions.set(sku, {
+        payment: {
+          id: "0123456789012345678",
+          status: 1,
+          items: [{ sku, amount: 1 }],
+          isConsumed: false,
+        },
+        endDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+      });
+
+      iap.onSubscriptionStatusChange.fire({
+        subscription: sku,
+        state: "active",
+      });
+    } else {
+      console.info("Premium item not found");
+    }
+  }
 }
 
 let CheatAutoInit = new Proxy(Cheat, {
